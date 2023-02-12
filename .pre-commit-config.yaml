@@ -1,0 +1,86 @@
+repos:
+  - repo: https://github.com/ambv/black
+    rev: 22.12.0
+    hooks:
+      - id: black
+        args: ['-l 100']
+  - repo: https://github.com/pre-commit/mirrors-prettier
+    rev: v2.7.1
+    hooks:
+      - id: prettier
+        args: [--prose-wrap=always, --print-width=110]
+        exclude: docs/
+        entry: prettier --write --single-quote --trailing-comma=all
+        files: "\\.(\
+          css|less|scss\
+          |graphql|gql\
+          |js|jsx\
+          |ts|tsx\
+          |yaml|yml\
+          )$"
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.4.0
+    hooks:
+      - id: check-merge-conflict
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: pretty-format-json
+        types: [json]
+        args: [--autofix]
+      - id: check-json
+      - id: check-ast
+      - id: check-merge-conflict
+      - id: check-case-conflict
+      - id: check-docstring-first
+      - id: requirements-txt-fixer
+      - id: check-added-large-files
+        args: ['--maxkb=1000'] # Check for files larger than 1MB
+  - repo: https://github.com/PyCQA/isort
+    rev: 5.12.0
+    hooks:
+      - id: isort
+        args: ['--profile', 'black']
+  - repo: https://github.com/pycqa/pylint
+    rev: v2.15.10
+    hooks:
+      - id: pylint
+  # - repo: local
+  #   hooks:
+  #     - id: tests
+  #       name: run tests
+  #       stages: [push]
+  #       types: [python]
+  #       entry: pytest -v
+  #       language: system
+  #       pass_filenames: false
+  # Autoflake
+  - repo: https://github.com/myint/autoflake
+    rev: v2.0.0
+    hooks:
+      - id: autoflake
+        args:
+          - --in-place
+          - --remove-all-unused-imports
+          - --expand-star-imports
+          - --remove-duplicate-keys
+          - --remove-unused-variables
+  - repo: https://github.com/asottile/pyupgrade
+    rev: v3.3.1
+    hooks:
+      - id: pyupgrade
+        args: [--py37-plus]
+  - repo: https://github.com/adamchainz/blacken-docs
+    rev: 1.13.0
+    hooks:
+      - id: blacken-docs
+        additional_dependencies:
+          - black==22.12.0
+  # - repo: https://github.com/bridgecrewio/checkov.git
+  #   rev: 2.1.121
+  #   hooks:
+  #     - id: checkov
+  #       name: 'Checkov'
+  - repo: https://github.com/roy-ht/pre-commit-jupyter
+    rev: v1.2.1
+    hooks:
+      - id: jupyter-notebook-cleanup
