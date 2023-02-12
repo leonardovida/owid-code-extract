@@ -30,18 +30,12 @@ def filter_cities(geographical_area: List[str], population_threshold: int):
 
     # Column 17 represents the region but can be of different types
     # e.g. Europe/Berlin, Europe/Amsterdam, etc.
-
-    # lower the entire column 17
-
     # Filter df on the selected area
     for area in geographical_area:
-        df = df[df[17].str.startswith(str.lower(area))]
+        df = df[df[17].str.lower().str.startswith(str.lower(area))]
 
-    # Fitler df on the population threshold
+    # Filter df on the population threshold
     return (
-        df[df[14] >= population_threshold]
-        # TODO: select only ID; region and population
-        # [ID; 14, 17]
-        # TODO: rename columns
-        .rename({0: "id", 2: "city_name", 14: "population", 17: "region"})
-    )
+        df.loc[df[14] >= population_threshold]
+      .rename(columns={0: "id", 2: "city_name", 14: "population", 17: "region"})
+)
